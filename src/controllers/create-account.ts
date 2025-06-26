@@ -1,8 +1,36 @@
-import { ConflictException } from '@nestjs/common';
-import { Body, Controller, HttpCode, Post } from '@nestjs/common';
-import { hash } from 'bcryptjs';
+import {
+  Body,
+  ConflictException,
+  Controller,
+  HttpCode,
+  Post,
+  UsePipes,
+} from '@nestjs/common'
+import { hash } from 'bcryptjs'
+import { ZodValidationPipe } from 'src/pipes/zod-validation-pipe'
+import { PrismaService } from 'src/prisma/prisma.service'
+import { z } from 'zod'
 
-import { PrismaService } from 'src/prisma/prisma.service';
+const createAccountBodySchema = z.object({
+  name: z
+    .string()
+    .min(3, 'O nome deve ter pelo menos 3 caracteres')
+    .max(200, 'O nome deve ter no máximo 200 caracteres')
+    .nonempty('O nome é obrigatório'),
+  email: z.string().email('E-mail inválido').nonempty('O e-mail é obrigatório'),
+  login: z
+    .string()
+    .min(3, 'O login deve ter pelo menos 3 caracteres')
+    .max(50, 'O login deve ter no máximo 50 caracteres')
+    .nonempty('O login é obrigatório'),
+  password: z
+    .string()
+    .min(6, 'A senha deve ter pelo menos 6 caracteres')
+    .max(100, 'A senha deve ter no máximo 100 caracteres')
+    .nonempty('A senha é obrigatória'),
+})
+
+type CreateAccountBodySchema = z.infer<typeof createAccountBodySchema>
 
 @Controller('/accounts')
 export class CreateAccountController {
@@ -10,27 +38,32 @@ export class CreateAccountController {
 
   @Post()
   @HttpCode(201)
-  async handle(@Body() body: any) {
-    const { name, email, login, password } = body;
+  @UsePipes(new ZodValidationPipe(createAccountBodySchema))
+  async handle(@Body() body: CreateAccountBodySchema) {
+    const { name, email, login, password } = body
 
     const userWithSameEmail = await this.prisma.user.findUnique({
       where: {
-        email
-      }
+        email,
+      },
     })
 
     const userWithSameLogin = await this.prisma.user.findUnique({
       where: {
-        login
-      }
+        login,
+      },
     })
 
     if (userWithSameEmail) {
-      throw new ConflictException('Já existe um usuário com este e-mail cadastrado')
+      throw new ConflictException(
+        'Já existe um usuário com este e-mail cadastrado',
+      )
     }
 
     if (userWithSameLogin) {
-      throw new ConflictException('Já existe um usuário com este login cadastrado')
+      throw new ConflictException(
+        'Já existe um usuário com este login cadastrado',
+      )
     }
 
     const hashedPassword = await hash(password, 8)
@@ -41,7 +74,7 @@ export class CreateAccountController {
         email,
         login,
         password: hashedPassword,
-      }
+      },
     })
   }
 }

@@ -21,7 +21,9 @@
     "@prisma/client": "^6.10.1",
     "bcryptjs": "^3.0.2",
     "reflect-metadata": "^0.2.2",
-    "rxjs": "^7.8.1"
+    "rxjs": "^7.8.1",
+    "zod": "^3.25.67",
+    "zod-validation-error": "^3.5.2"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3.2.0",
@@ -29,7 +31,7 @@
     "@nestjs/cli": "^11.0.0",
     "@nestjs/schematics": "^11.0.0",
     "@nestjs/testing": "^11.0.1",
-    "@rocketseat/eslint-config": "^2.2.2",
+    "@rocketseat/eslint-config": "^3.0.12",
     "@swc/cli": "^0.6.0",
     "@swc/core": "^1.10.7",
     "@types/bcryptjs": "^3.0.0",
@@ -38,7 +40,9 @@
     "eslint": "^9.18.0",
     "eslint-config-prettier": "^10.0.1",
     "eslint-plugin-prettier": "^5.2.2",
+    "eslint-plugin-simple-import-sort": "^12.1.1",
     "globals": "^16.0.0",
+    "neostandard": "^0.12.1",
     "prettier": "^3.4.2",
     "prisma": "^6.10.1",
     "source-map-support": "^0.5.21",
