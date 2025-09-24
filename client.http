@@ -1,0 +1,32 @@
+@baseUrl = http://192.168.1.2:3333
+
+@authToken = {{authenticate_user.response.body.access_token}}
+
+# @name Criar novo usuário
+POST {{baseUrl}}/accounts
+Content-type: application/json
+
+{
+  "name": "John Doe",
+  "email": "john.doe1@example.com",
+  "login": "johndoe1",
+  "password": "123456"
+} 
+
+###
+
+# @name authenticate_user
+POST {{baseUrl}}/sessions
+Content-Type: application/json
+
+{
+  "login": "murilo2",
+  "password": "123456"
+}
+
+###
+
+# @name Create_question 
+Post {{baseUrl}}/questions
+Content-Type: application/json
+Authorization: Bearer {{authToken}}
