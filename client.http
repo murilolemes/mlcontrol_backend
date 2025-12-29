@@ -1,8 +1,9 @@
 @baseUrl = http://192.168.1.2:3333
 
-@authToken = {{Autenticar_Usuário.response.body.access_token}}
+@authToken = {{authenticate_user.response.body.access_token}}
 
-# @name Criar_novo_usuário
+#Criar novo usuário
+# @name Create_user
 POST {{baseUrl}}/accounts
 Content-type: application/json
 
@@ -14,7 +15,8 @@ Content-type: application/json
 } 
 
 ###
-# @name Atualizar_usuário
+#Atualizar usuário
+# @name Update_user
 PUT {{baseUrl}}/accounts/b0809cf3-9160-4719-b0ce-c21db9536eba
 Content-Type: application/json
 Authorization: Bearer {{authToken}}
@@ -24,19 +26,22 @@ Authorization: Bearer {{authToken}}
 }
 
 ###
+#Listar todos os usuários
 # @name Listar_Usuários
 Get {{baseUrl}}/accounts
 Content-Type: application/json
 Authorization: Bearer {{authToken}}
 
 ###
-# @name Listar_Contas
+#Mostrar um usuário específico
+# @name Show_account
 Get {{baseUrl}}/accounts/b0809cf3-9160-4719-b0ce-c21db9536eba
 Content-Type: application/json
 Authorization: Bearer {{authToken}}
 
 ###
-# @name Autenticar_Usuário
+#Autenticar usuário
+# @name authenticate_user
 POST {{baseUrl}}/sessions
 Content-Type: application/json
 
