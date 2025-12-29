@@ -1,8 +1,8 @@
 @baseUrl = http://192.168.1.2:3333
 
-@authToken = {{authenticate_user.response.body.access_token}}
+@authToken = {{Autenticar_Usuário.response.body.access_token}}
 
-# @name Criar novo usuário
+# @name Criar_novo_usuário
 POST {{baseUrl}}/accounts
 Content-type: application/json
 
@@ -14,8 +14,29 @@ Content-type: application/json
 } 
 
 ###
+# @name Atualizar_usuário
+PUT {{baseUrl}}/accounts/b0809cf3-9160-4719-b0ce-c21db9536eba
+Content-Type: application/json
+Authorization: Bearer {{authToken}}
 
-# @name authenticate_user
+{
+  "name": "John Doe Updated"
+}
+
+###
+# @name Listar_Usuários
+Get {{baseUrl}}/accounts
+Content-Type: application/json
+Authorization: Bearer {{authToken}}
+
+###
+# @name Listar_Contas
+Get {{baseUrl}}/accounts/b0809cf3-9160-4719-b0ce-c21db9536eba
+Content-Type: application/json
+Authorization: Bearer {{authToken}}
+
+###
+# @name Autenticar_Usuário
 POST {{baseUrl}}/sessions
 Content-Type: application/json
 
@@ -25,7 +46,6 @@ Content-Type: application/json
 }
 
 ###
-
 # @name Create_question 
 Post {{baseUrl}}/questions
 Content-Type: application/json

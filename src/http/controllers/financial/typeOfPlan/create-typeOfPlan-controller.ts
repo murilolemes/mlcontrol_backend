@@ -5,7 +5,7 @@ import { Controller, Post, UseGuards } from '@nestjs/common'
 
 @Controller('/questions')
 @UseGuards(JwtAuthGuard)
-export class CreateQuestionController {
+export class CreateTypeOfPlanController {
   constructor() { }
 
   @Post()
