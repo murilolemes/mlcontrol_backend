@@ -48,13 +48,21 @@ export class AuthenticateController {
       throw new UnauthorizedException('As credenciais do usuário não correspondem')
     }
 
+    const id = user.id;
     const isPasswordValid = await compare(password, user.password)
 
     if (!isPasswordValid) {
       throw new UnauthorizedException('As credenciais do usuário não correspondem')
     }
 
-    const accessToken = this.jwt.sign({ sub: user.id })
+    const accessToken = this.jwt.sign({ sub: id })
+
+    await this.prisma.user.update({
+      where: { id },
+      data: {
+        lastAccess: new Date(),
+      }
+    })
 
     return {
       access_token: accessToken,

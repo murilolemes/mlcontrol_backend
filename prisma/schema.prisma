@@ -8,6 +8,7 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+// Usuários
 model User {
   id         String    @id @default(uuid())
   name       String
@@ -20,4 +21,229 @@ model User {
   active     Boolean   @default(true)
 
   @@map("users")
+}
+
+// Tipo do cliente
+enum ClientType {
+  PF
+  PJ
+}
+
+// Clientes
+model Client {
+  id                String     @id @default(uuid())
+  name              String
+  fantasyName       String?    @map("fantasy_name")
+  tipo              ClientType
+  cpfCnpj           String     @unique @map("cpf_cnpj")
+  stateRegistration String?    @map("state_registration")
+  observation       String?
+  createdAt         DateTime   @default(now()) @map("created_at")
+  updatedAt         DateTime?  @updatedAt @map("updated_at")
+  provider          Boolean    @default(false)
+  active            Boolean    @default(true)
+
+  emails             Email[]
+  phones             Phone[]
+  accountReceivables account_receivable[]
+  addresses          address[]
+
+  @@map("clients")
+}
+
+// E-mails
+model Email {
+  id       String  @id @default(uuid())
+  address  String
+  verified Boolean @default(false)
+
+  clientId String @map("client_id")
+  client   Client @relation(fields: [clientId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now()) @map("created_at")
+  active    Boolean  @default(true)
+
+  @@map("emails")
+}
+
+// Telefones
+model Phone {
+  id     String @id @default(uuid())
+  number String
+
+  clientId String @map("client_id")
+  client   Client @relation(fields: [clientId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now()) @map("created_at")
+  active    Boolean  @default(true)
+
+  @@map("phones")
+}
+
+// Tipo da despesa
+enum ExpenseType {
+  Credito
+  Debito
+}
+
+// Despesas
+model expense {
+  id          String      @id @default(uuid())
+  description String
+  type        ExpenseType
+  createdAt   DateTime    @default(now()) @map("created_at")
+  updatedAt   DateTime?   @updatedAt @map("updated_at")
+  active      Boolean     @default(true)
+
+  accountPayables    account_payable[]
+  accountReceivables account_receivable[]
+
+  @@map("expense_categories")
+}
+
+// Status do pagamento
+enum PaymentStatus {
+  Pendente
+  Pago
+  Cancelado
+}
+
+// Contas a pagar
+model account_payable {
+  id             String        @id @default(uuid())
+  paymentDate    DateTime      @map("payment_date")
+  status         PaymentStatus
+  issueDate      DateTime      @map("issue_date")
+  dueDate        DateTime      @map("due_date")
+  invoiceAmount  Int           @map("invoice_amount")
+  invoiceNumber  String        @map("invoice_number")
+  penaltyAmount  Int?          @map("penalty_amount")
+  interestAmount Int?          @map("interest_amount")
+  observation    String?
+  purchaseCode   String?       @map("purchase_code")
+  createdAt      DateTime      @default(now()) @map("created_at")
+  updatedAt      DateTime?     @updatedAt @map("updated_at")
+  active         Boolean       @default(true)
+
+  expenseId String  @map("expense_id")
+  expense   expense @relation(fields: [expenseId], references: [id], onDelete: Cascade)
+
+  paymentMethodId String         @map("payment_method_id")
+  paymentMethod   payment_method @relation(fields: [paymentMethodId], references: [id], onDelete: Cascade)
+
+  @@map("account_payables")
+}
+
+// Contas a receber
+model account_receivable {
+  id             String        @id @default(uuid())
+  paymentDate    DateTime      @map("payment_date")
+  status         PaymentStatus
+  issueDate      DateTime      @map("issue_date")
+  dueDate        DateTime      @map("due_date")
+  invoiceAmount  Int           @map("invoice_amount")
+  invoiceNumber  String        @map("invoice_number")
+  penaltyAmount  Int?          @map("penalty_amount")
+  interestAmount Int?          @map("interest_amount")
+  description    String?
+  observation    String?
+  createdAt      DateTime      @default(now()) @map("created_at")
+  updatedAt      DateTime?     @updatedAt @map("updated_at")
+  active         Boolean       @default(true)
+
+  clientId String @map("client_id")
+  client   Client @relation(fields: [clientId], references: [id], onDelete: Cascade)
+
+  expenseId String  @map("expense_id")
+  expense   expense @relation(fields: [expenseId], references: [id], onDelete: Cascade)
+
+  paymentMethodId String         @map("payment_method_id")
+  paymentMethod   payment_method @relation(fields: [paymentMethodId], references: [id], onDelete: Cascade)
+
+  @@map("account_receivables")
+}
+
+// Tipos de pagamento
+model payment_type {
+  id          String    @id @default(uuid())
+  description String
+  createdAt   DateTime  @default(now()) @map("created_at")
+  updatedAt   DateTime? @updatedAt @map("updated_at")
+  active      Boolean   @default(true)
+
+  paymentMethods payment_method[]
+
+  @@map("payment_types")
+}
+
+// Formas de pagamento
+model payment_method {
+  id          String    @id @default(uuid())
+  description String
+  createdAt   DateTime  @default(now()) @map("created_at")
+  updatedAt   DateTime? @updatedAt @map("updated_at")
+  active      Boolean   @default(true)
+
+  paymentTypeId String       @map("payment_type_id")
+  paymentType   payment_type @relation(fields: [paymentTypeId], references: [id], onDelete: Cascade)
+
+  accountReceivables account_receivable[]
+  accountPayables    account_payable[]
+  cashierMovements   cashier_movement[]
+
+  @@map("payment_methods")
+}
+
+// Caixa
+model cashier {
+  id               String             @id @default(uuid())
+  openingValue     Int                @map("opening_value")
+  closingValue     Int?               @map("closing_value")
+  cashierNumber    Int                @map("cashier_number")
+  openingDate      DateTime           @default(now()) @map("opening_date")
+  closingDate      DateTime?          @map("closing_date")
+  active           Boolean            @default(true)
+  cashierMovements cashier_movement[]
+
+  @@map("cashiers")
+}
+
+// Movimentações do caixa
+model cashier_movement {
+  id            String   @id @default(uuid())
+  movementValue Int      @map("movement_value")
+  movementDate  DateTime @default(now()) @map("movement_date")
+  observation   String?
+
+  cashierId String  @map("cashier_id")
+  cashier   cashier @relation(fields: [cashierId], references: [id], onDelete: Cascade)
+
+  paymentMethodId String         @map("payment_method_id")
+  paymentMethod   payment_method @relation(fields: [paymentMethodId], references: [id], onDelete: Cascade)
+
+  @@map("cashier_movements")
+}
+
+// Endereços
+model address {
+  id           String    @id @default(uuid())
+  cep          String
+  street       String
+  number       String
+  complement   String?
+  neighborhood String
+  city         String
+  state        String
+  uf           String
+  ibgeCode     String    @map("ibge_code")
+  latitude     Decimal?
+  longitude    Decimal?
+  createdAt    DateTime  @default(now()) @map("created_at")
+  updatedAt    DateTime? @updatedAt @map("updated_at")
+  isMain       Boolean   @default(false) @map("is_main")
+
+  clientId String @map("client_id")
+  client   Client @relation(fields: [clientId], references: [id], onDelete: Cascade)
+
+  @@map("addresses")
 }

@@ -1,4 +1,4 @@
-@baseUrl = http://192.168.1.2:3333
+@baseUrl = http://localhost:3333
 
 @authToken = {{authenticate_user.response.body.access_token}}
 
@@ -8,9 +8,9 @@ POST {{baseUrl}}/accounts
 Content-type: application/json
 
 {
-  "name": "John Doe",
-  "email": "john.doe1@example.com",
-  "login": "johndoe1",
+  "name": "Murilo Lemes",
+  "email": "murilo.lemes@example.com",
+  "login": "murilo.lemes",
   "password": "123456"
 } 
 
@@ -35,7 +35,7 @@ Authorization: Bearer {{authToken}}
 ###
 #Mostrar um usuário específico
 # @name Show_account
-Get {{baseUrl}}/accounts/b0809cf3-9160-4719-b0ce-c21db9536eba
+Get {{baseUrl}}/accounts/cb895e2f-ce32-46cc-ba88-bb55dd7aac91
 Content-Type: application/json
 Authorization: Bearer {{authToken}}
 
@@ -46,7 +46,7 @@ POST {{baseUrl}}/sessions
 Content-Type: application/json
 
 {
-  "login": "murilo2",
+  "login": "murilo.lemes",
   "password": "123456"
 }
 

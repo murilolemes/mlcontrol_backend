@@ -74,6 +74,8 @@ export class CreateAccountController {
         email,
         login,
         password: hashedPassword,
+        // createdAt: getNewDate(),
+        // updatedAt: getNewDate(),
       },
     })
   }
