@@ -5,6 +5,8 @@ import { ListAccountController } from "./controllers/account/list-account-contro
 import { ShowAccountController } from "./controllers/account/show-account-controller";
 import { UpdateAccountController } from "./controllers/account/update-account-controller";
 import { AuthenticateController } from "./controllers/auth/authenticate-controller";
+import { LogoutController } from "./controllers/auth/logout-controller";
+import { MeController } from "./controllers/auth/me-controller";
 import { CreateTypeOfPlanController } from "./controllers/financial/typeOfPlan/create-typeOfPlan-controller";
 
 @Module({
@@ -14,7 +16,9 @@ import { CreateTypeOfPlanController } from "./controllers/financial/typeOfPlan/c
     ShowAccountController,
     UpdateAccountController,
     AuthenticateController,
-    CreateTypeOfPlanController
+    CreateTypeOfPlanController,
+    MeController,
+    LogoutController
   ],
   providers: [PrismaService]
 })

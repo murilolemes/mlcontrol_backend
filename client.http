@@ -42,7 +42,7 @@ Authorization: Bearer {{authToken}}
 ###
 #Autenticar usuário
 # @name authenticate_user
-POST {{baseUrl}}/sessions
+POST {{baseUrl}}/auth/login
 Content-Type: application/json
 
 {
