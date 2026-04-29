@@ -28,6 +28,7 @@ const createAccountBodySchema = z.object({
     .min(6, 'A senha deve ter pelo menos 6 caracteres')
     .max(100, 'A senha deve ter no máximo 100 caracteres')
     .nonempty('A senha é obrigatória'),
+  companyId: z.string().nonempty('Empresa não informada'),
 })
 
 type CreateAccountBodySchema = z.infer<typeof createAccountBodySchema>
@@ -40,7 +41,7 @@ export class CreateAccountController {
   @HttpCode(201)
   @UsePipes(new ZodValidationPipe(createAccountBodySchema))
   async handle(@Body() body: CreateAccountBodySchema) {
-    const { name, email, login, password } = body
+    const { name, email, login, password, companyId } = body
 
     const userWithSameEmail = await this.prisma.user.findUnique({
       where: {
@@ -53,6 +54,18 @@ export class CreateAccountController {
         login,
       },
     })
+
+    const companyExists = await this.prisma.company.findUnique({
+      where: {
+        id: companyId,
+      }
+    })
+
+    if (!companyExists) {
+      throw new ConflictException(
+        'Empresa não encontrada'
+      )
+    }
 
     if (userWithSameEmail) {
       throw new ConflictException(
@@ -68,15 +81,18 @@ export class CreateAccountController {
 
     const hashedPassword = await hash(password, 8)
 
-    await this.prisma.user.create({
+    const user = await this.prisma.user.create({
       data: {
         name,
         email,
         login,
         password: hashedPassword,
-        // createdAt: getNewDate(),
-        // updatedAt: getNewDate(),
+        companyId,
       },
     })
+
+    return {
+      user,
+    }
   }
 }
