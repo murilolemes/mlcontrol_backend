@@ -60,9 +60,11 @@ export class AuthenticateController {
       throw new UnauthorizedException('As credenciais do usuário não correspondem')
     }
 
+    const companyId = user.companyId;
+
     const accessToken = await this.jwt.signAsync(
-      { sub: id },
-      { expiresIn: '7d' }
+      { sub: id, companyId },
+      { expiresIn: '7d' },
     )
 
     res.cookie('access_token', accessToken, {

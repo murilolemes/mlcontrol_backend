@@ -32,7 +32,8 @@ export class MeController {
         where: { id: decode.sub },
         select: {
           id: true,
-          name: true
+          name: true,
+          companyId: true
         }
       })
 
