@@ -9,9 +9,10 @@ Content-type: application/json
 
 {
   "name": "Murilo Lemes",
-  "email": "murilo.lemes@example.com",
-  "login": "murilo.lemes",
-  "password": "123456"
+  "email": "murilo.lemes.mhl@gmail.com",
+  "login": "murilo",
+  "password": "123456",
+  "companyId": "ee70ff1f-6fb1-4275-a5dd-6f8c79333687"
 } 
 
 ###
@@ -51,7 +52,28 @@ Content-Type: application/json
 }
 
 ###
-# @name Create_question 
-Post {{baseUrl}}/questions
+#Criar nova empresa
+# @name create_company
+POST {{baseUrl}}/companies
 Content-Type: application/json
-Authorization: Bearer {{authToken}}
+
+{
+  "name": "ML Control",
+  "fantasyNema": "MLCONTROL",
+  "cpfCnpj": "42174674866",
+  "type": "PF"
+}
+
+###
+#Criar novo cliente
+# @name create_client
+POST {{baseUrl}}/clients
+Content-Type: application/json
+
+{
+  "name": "Murilo Lemees",
+  "type": "PF",
+  "cpfCnpj": "42174674866",
+  "companyId": "ee70ff1f-6fb1-4275-a5dd-6f8c79333687",
+  "email": "murilo.lemes@gmail.com"
+}
