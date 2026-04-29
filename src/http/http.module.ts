@@ -7,18 +7,33 @@ import { UpdateAccountController } from "./controllers/account/update-account-co
 import { AuthenticateController } from "./controllers/auth/authenticate-controller";
 import { LogoutController } from "./controllers/auth/logout-controller";
 import { MeController } from "./controllers/auth/me-controller";
+import { CreateClientController } from "./controllers/client/create-client-controller";
+import { CreateCompanyController } from "./controllers/company/create-company-controller";
 import { CreateTypeOfPlanController } from "./controllers/financial/typeOfPlan/create-typeOfPlan-controller";
 
 @Module({
   controllers: [
+    // Conta
     CreateAccountController,
     ListAccountController,
     ShowAccountController,
     UpdateAccountController,
-    AuthenticateController,
-    CreateTypeOfPlanController,
+
+    // Usuário logado
     MeController,
-    LogoutController
+    LogoutController,
+
+    // Autenticação
+    AuthenticateController,
+
+    // Empresa
+    CreateCompanyController,
+
+    // Clientes
+    CreateClientController,
+
+    // Plano de contas
+    CreateTypeOfPlanController,
   ],
   providers: [PrismaService]
 })
