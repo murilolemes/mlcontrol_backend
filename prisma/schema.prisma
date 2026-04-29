@@ -35,7 +35,7 @@ model Client {
   id                String     @id @default(uuid())
   name              String
   fantasyName       String?    @map("fantasy_name")
-  tipo              ClientType
+  type              ClientType
   cpfCnpj           String     @unique @map("cpf_cnpj")
   stateRegistration String?    @map("state_registration")
   observation       String?
@@ -58,7 +58,7 @@ model Client {
 // E-mails
 model Email {
   id       String  @id @default(uuid())
-  address  String
+  address  String  @unique
   verified Boolean @default(false)
 
   clientId String @map("client_id")
@@ -282,7 +282,7 @@ model Company {
   id                String     @id @default(uuid())
   name              String
   fantasyName       String?    @map("fantasy_name")
-  tipo              ClientType
+  type              ClientType
   cpfCnpj           String     @unique @map("cpf_cnpj")
   stateRegistration String?    @map("state_registration")
   observation       String?
