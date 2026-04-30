@@ -8,6 +8,7 @@ import { AuthenticateController } from "./controllers/auth/authenticate-controll
 import { LogoutController } from "./controllers/auth/logout-controller";
 import { MeController } from "./controllers/auth/me-controller";
 import { CreateClientController } from "./controllers/client/create-client-controller";
+import { ListClientController } from "./controllers/client/list-client-controller";
 import { CreateCompanyController } from "./controllers/company/create-company-controller";
 import { CreateTypeOfPlanController } from "./controllers/financial/typeOfPlan/create-typeOfPlan-controller";
 
@@ -31,6 +32,7 @@ import { CreateTypeOfPlanController } from "./controllers/financial/typeOfPlan/c
 
     // Clientes
     CreateClientController,
+    ListClientController,
 
     // Plano de contas
     CreateTypeOfPlanController,

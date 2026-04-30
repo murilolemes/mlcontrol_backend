@@ -8,11 +8,11 @@ POST {{baseUrl}}/accounts
 Content-type: application/json
 
 {
-  "name": "Murilo Lemes",
-  "email": "murilo.lemes.mhl@gmail.com",
-  "login": "murilo",
+  "name": "Lara Gratão",
+  "email": "laragratao@gmail.com",
+  "login": "lara",
   "password": "123456",
-  "companyId": "ee70ff1f-6fb1-4275-a5dd-6f8c79333687"
+  "companyId": "6f2dc694-3091-4cda-8f85-cabc78b95dff"
 } 
 
 ###
@@ -29,7 +29,7 @@ Authorization: Bearer {{authToken}}
 ###
 #Listar todos os usuários
 # @name Listar_Usuários
-Get {{baseUrl}}/accounts
+Get {{baseUrl}}/accounts 
 Content-Type: application/json
 Authorization: Bearer {{authToken}}
 
@@ -47,7 +47,7 @@ POST {{baseUrl}}/auth/login
 Content-Type: application/json
 
 {
-  "login": "murilo.lemes",
+  "login": "murilo",
   "password": "123456"
 }
 
@@ -58,9 +58,8 @@ POST {{baseUrl}}/companies
 Content-Type: application/json
 
 {
-  "name": "ML Control",
-  "fantasyNema": "MLCONTROL",
-  "cpfCnpj": "42174674866",
+  "name": "Vida e Movimento",
+  "cpfCnpj": "41003782892",
   "type": "PF"
 }
 
@@ -71,9 +70,30 @@ POST {{baseUrl}}/clients
 Content-Type: application/json
 
 {
-  "name": "Murilo Lemees",
+  "name": "Murilo Henrique",
   "type": "PF",
   "cpfCnpj": "42174674866",
-  "companyId": "ee70ff1f-6fb1-4275-a5dd-6f8c79333687",
+  "companyId": "6f2dc694-3091-4cda-8f85-cabc78b95dff",
   "email": "murilo.lemes@gmail.com"
 }
+
+###
+#Listar todos os clientes
+# @name list_clients
+GET {{baseUrl}}/clients/ee70ff1f-6fb1-4275-a5dd-6f8c79333687
+Content-Type: application/json
+Authorization: Bearer {{authToken}}
+
+###
+#Listar todos os clientes
+# @name list_clients
+GET {{baseUrl}}/clients/6f2dc694-3091-4cda-8f85-cabc78b95dff
+Content-Type: application/json
+Authorization: Bearer {{authToken}}
+
+###
+#Listar todos os clientes
+# @name auth_me
+GET {{baseUrl}}/auth/me
+Content-Type: application/json
+Authorization: Bearer {{authToken}}

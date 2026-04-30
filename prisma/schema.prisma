@@ -36,7 +36,7 @@ model Client {
   name              String
   fantasyName       String?    @map("fantasy_name")
   type              ClientType
-  cpfCnpj           String     @unique @map("cpf_cnpj")
+  cpfCnpj           String     @map("cpf_cnpj")
   stateRegistration String?    @map("state_registration")
   observation       String?
   createdAt         DateTime   @default(now()) @map("created_at")
@@ -52,13 +52,14 @@ model Client {
   accountReceivables Account_receivable[]
   addresses          Address[]
 
+  @@unique([companyId, cpfCnpj])
   @@map("clients")
 }
 
 // E-mails
 model Email {
   id       String  @id @default(uuid())
-  address  String  @unique
+  address  String
   verified Boolean @default(false)
 
   clientId String @map("client_id")
@@ -70,6 +71,7 @@ model Email {
   companyId String   @map("company_id")
   company   Company? @relation(fields: [companyId], references: [id], onDelete: Cascade)
 
+  @@unique([companyId, address])
   @@map("emails")
 }
 
