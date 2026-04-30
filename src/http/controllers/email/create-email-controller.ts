@@ -25,9 +25,10 @@ export class CreateEmailController {
       companyId
     } = body
 
-    const emailWithSameAddress = await this.prisma.email.findUnique({
+    const emailWithSameAddress = await this.prisma.email.findFirst({
       where: {
-        address
+        address,
+        companyId,
       }
     })
 
