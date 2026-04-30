@@ -65,9 +65,10 @@ export class CreateClientController {
       phone
     } = body
 
-    const clientWithSameCpfCnpj = await this.prisma.client.findUnique({
+    const clientWithSameCpfCnpj = await this.prisma.client.findFirst({
       where: {
         cpfCnpj,
+        companyId,
       },
     })
 
@@ -87,11 +88,14 @@ export class CreateClientController {
       )
     }
 
-    const clientWithSameEmail = await this.prisma.email.findUnique({
-      where: {
-        address: email
-      }
-    })
+    const clientWithSameEmail = email
+      ? await this.prisma.email.findFirst({
+        where: {
+          address: email,
+          companyId,
+        }
+      })
+      : null
 
     if (email && clientWithSameEmail) {
       throw new ConflictException(
