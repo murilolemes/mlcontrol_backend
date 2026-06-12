@@ -2040,8 +2040,8 @@ packages:
     peerDependencies:
       eslint: ^7.0.0 || ^8.0.0 || ^9.0.0 || ^10.0.0
 
-  eslint-plugin-react-hooks@7.1.1-canary-561ed529-20260423:
-    resolution: {integrity: sha512-Xaz0KLBxp6bW1svKvSZUPEYOHn7mSvDRu3VPcFT6dJM7j+mQV0WBnxLLIkWnGu8bSgcPi7cdwEliPg1hDdOKYQ==}
+  eslint-plugin-react-hooks@7.1.1-canary-e730b5e6-20260612:
+    resolution: {integrity: sha512-2DdiJjTN2eMezBKt2+0iZ9ciWDRvHdBCUyABpklFv9gNBzgTLfCedKtE77uCJTxJ5r8O9oSQZr96gEhQo1WDCw==}
     engines: {node: '>=18'}
     peerDependencies:
       eslint: ^3.0.0 || ^4.0.0 || ^5.0.0 || ^6.0.0 || ^7.0.0 || ^8.0.0-0 || ^9.0.0 || ^10.0.0
@@ -4557,7 +4557,7 @@ snapshots:
       '@eslint/js': 9.39.4
       '@types/eslint__js': 8.42.3
       eslint: 9.39.4(jiti@2.6.1)
-      eslint-plugin-react-hooks: 7.1.1-canary-561ed529-20260423(eslint@9.39.4(jiti@2.6.1))
+      eslint-plugin-react-hooks: 7.1.1-canary-e730b5e6-20260612(eslint@9.39.4(jiti@2.6.1))
       globals: 15.15.0
       neostandard: 0.11.9(eslint@9.39.4(jiti@2.6.1))(typescript@5.9.3)
       typescript-eslint: 8.59.0(eslint@9.39.4(jiti@2.6.1))(typescript@5.9.3)
@@ -5877,7 +5877,7 @@ snapshots:
       '@eslint-community/eslint-utils': 4.9.1(eslint@9.39.4(jiti@2.6.1))
       eslint: 9.39.4(jiti@2.6.1)
 
-  eslint-plugin-react-hooks@7.1.1-canary-561ed529-20260423(eslint@9.39.4(jiti@2.6.1)):
+  eslint-plugin-react-hooks@7.1.1-canary-e730b5e6-20260612(eslint@9.39.4(jiti@2.6.1)):
     dependencies:
       '@babel/core': 7.29.0
       '@babel/parser': 7.29.2

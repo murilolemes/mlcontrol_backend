@@ -13,6 +13,7 @@ model User {
   email      String    @unique
   login      String    @unique
   password   String
+  avatar     String?
   createdAt  DateTime  @default(now()) @map("created_at")
   updatedAt  DateTime? @updatedAt @map("updated_at")
   lastAccess DateTime? @map("last_access")
@@ -36,7 +37,7 @@ model Client {
   name              String
   fantasyName       String?    @map("fantasy_name")
   type              ClientType
-  cpfCnpj           String     @map("cpf_cnpj")
+  cpfCnpj           String?    @map("cpf_cnpj")
   stateRegistration String?    @map("state_registration")
   observation       String?
   createdAt         DateTime   @default(now()) @map("created_at")

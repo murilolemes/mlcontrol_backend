@@ -33,7 +33,9 @@ export class MeController {
         select: {
           id: true,
           name: true,
-          companyId: true
+          email: true,
+          companyId: true,
+          avatar: true,
         }
       })
 

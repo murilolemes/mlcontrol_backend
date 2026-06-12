@@ -8,7 +8,7 @@ import { HttpModule } from './http/http.module'
   imports: [
     ConfigModule.forRoot({
       validate: env => envSchema.parse(env),
-      isGlobal: true
+      isGlobal: true,
     }),
     AuthModule,
     HttpModule

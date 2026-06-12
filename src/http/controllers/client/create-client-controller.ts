@@ -29,7 +29,7 @@ const createClientBodySchema = z.object({
     .string()
     .min(11, 'CPF/CNPJ inválido')
     .max(18, 'CPF/CNPJ inválido')
-    .nonempty('O CPF/CNPJ é obrigatório'),
+    .optional(),
   email: z.string().email('E-mail inválido').optional(),
   phone: z.string().max(20, 'O telefone deve ter no máximo 20 caracteres').optional(),
   stateRegistration: z
@@ -45,7 +45,7 @@ const createClientBodySchema = z.object({
 
 type CreateClientBodySchema = z.infer<typeof createClientBodySchema>
 
-@Controller('/clients')
+@Controller('/client')
 export class CreateClientController {
   constructor(private prisma: PrismaService) { }
 
@@ -65,17 +65,7 @@ export class CreateClientController {
       phone
     } = body
 
-    const clientWithSameCpfCnpj = await this.prisma.client.findFirst({
-      where: {
-        cpfCnpj,
-        companyId,
-      },
-    })
-
-    if (clientWithSameCpfCnpj) {
-      throw new ConflictException('Ja existe um cliente com este CPF/CNPJ')
-    }
-
+    // VERIFICA SE A EMPRESA EXISTE
     const companyExists = await this.prisma.company.findUnique({
       where: {
         id: companyId,
@@ -88,6 +78,19 @@ export class CreateClientController {
       )
     }
 
+    // VERIFICA SE JÁ EXISTE UM CLIENTE COM O MESMO CPF/CNPJ NA MESMA EMPRESA
+    const clientWithSameCpfCnpj = await this.prisma.client.findFirst({
+      where: {
+        cpfCnpj,
+        companyId,
+      },
+    })
+
+    if (clientWithSameCpfCnpj && cpfCnpj) {
+      throw new ConflictException('Ja existe um cliente com este CPF/CNPJ')
+    }
+
+    // VERIFICA SE JÁ EXISTE UM CLIENTE COM O MESMO E-MAIL NA MESMA EMPRESA
     const clientWithSameEmail = email
       ? await this.prisma.email.findFirst({
         where: {
@@ -103,6 +106,7 @@ export class CreateClientController {
       )
     }
 
+    // CRIA O CLIENTE E O E-MAIL DENTRO DE UMA TRANSAÇÃO
     const client = await this.prisma.$transaction(async (tx) => {
       const createdClient = await tx.client.create({
         data: {
