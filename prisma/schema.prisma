@@ -6,254 +6,197 @@ datasource db {
   provider = "postgresql"
 }
 
-// Usuários
 model User {
   id         String    @id @default(uuid())
   name       String
   email      String    @unique
   login      String    @unique
   password   String
-  avatar     String?
   createdAt  DateTime  @default(now()) @map("created_at")
   updatedAt  DateTime? @updatedAt @map("updated_at")
   lastAccess DateTime? @map("last_access")
   active     Boolean   @default(true)
-
-  companyId String   @map("company_id")
-  company   Company? @relation(fields: [companyId], references: [id], onDelete: Cascade)
+  companyId  String    @map("company_id")
+  avatar     String?
+  company    Company   @relation(fields: [companyId], references: [id], onDelete: Cascade)
 
   @@map("users")
 }
 
-// Tipo do cliente
-enum ClientType {
-  PF
-  PJ
-}
-
-// Clientes
 model Client {
-  id                String     @id @default(uuid())
-  name              String
-  fantasyName       String?    @map("fantasy_name")
-  type              ClientType
-  cpfCnpj           String?    @map("cpf_cnpj")
-  stateRegistration String?    @map("state_registration")
-  observation       String?
-  createdAt         DateTime   @default(now()) @map("created_at")
-  updatedAt         DateTime?  @updatedAt @map("updated_at")
-  provider          Boolean    @default(false)
-  active            Boolean    @default(true)
-
-  companyId String   @map("company_id")
-  company   Company? @relation(fields: [companyId], references: [id], onDelete: Cascade)
-
-  emails             Email[]
-  phones             Phone[]
+  id                 String               @id @default(uuid())
+  name               String
+  fantasyName        String?              @map("fantasy_name")
+  cpfCnpj            String?              @map("cpf_cnpj")
+  stateRegistration  String?              @map("state_registration")
+  observation        String?
+  createdAt          DateTime             @default(now()) @map("created_at")
+  updatedAt          DateTime?            @updatedAt @map("updated_at")
+  provider           Boolean              @default(false)
+  active             Boolean              @default(true)
+  companyId          String               @map("company_id")
+  type               ClientType
   accountReceivables Account_receivable[]
   addresses          Address[]
+  company            Company              @relation(fields: [companyId], references: [id], onDelete: Cascade)
+  emails             Email[]
+  phones             Phone[]
 
   @@unique([companyId, cpfCnpj])
   @@map("clients")
 }
 
-// E-mails
 model Email {
-  id       String  @id @default(uuid())
-  address  String
-  verified Boolean @default(false)
-
-  clientId String @map("client_id")
-  client   Client @relation(fields: [clientId], references: [id], onDelete: Cascade)
-
+  id        String   @id @default(uuid())
+  address   String
+  verified  Boolean  @default(false)
+  clientId  String   @map("client_id")
   createdAt DateTime @default(now()) @map("created_at")
   active    Boolean  @default(true)
-
   companyId String   @map("company_id")
-  company   Company? @relation(fields: [companyId], references: [id], onDelete: Cascade)
+  client    Client   @relation(fields: [clientId], references: [id], onDelete: Cascade)
+  company   Company  @relation(fields: [companyId], references: [id], onDelete: Cascade)
 
   @@unique([companyId, address])
   @@map("emails")
 }
 
-// Telefones
 model Phone {
-  id     String @id @default(uuid())
-  number String
-
-  clientId String @map("client_id")
-  client   Client @relation(fields: [clientId], references: [id], onDelete: Cascade)
-
+  id        String   @id @default(uuid())
+  number    String
+  clientId  String   @map("client_id")
   createdAt DateTime @default(now()) @map("created_at")
   active    Boolean  @default(true)
-
   companyId String   @map("company_id")
-  company   Company? @relation(fields: [companyId], references: [id], onDelete: Cascade)
+  client    Client   @relation(fields: [clientId], references: [id], onDelete: Cascade)
+  company   Company  @relation(fields: [companyId], references: [id], onDelete: Cascade)
 
   @@map("phones")
 }
 
-// Tipo da despesa
-enum ExpenseType {
-  Credito
-  Debito
-}
-
-// Despesas
 model Expense {
-  id          String      @id @default(uuid())
-  description String
-  type        ExpenseType
-  createdAt   DateTime    @default(now()) @map("created_at")
-  updatedAt   DateTime?   @updatedAt @map("updated_at")
-  active      Boolean     @default(true)
-
-  companyId String   @map("company_id")
-  company   Company? @relation(fields: [companyId], references: [id], onDelete: Cascade)
-
+  id                 String               @id @default(uuid())
+  description        String
+  type               ExpenseType
+  createdAt          DateTime             @default(now()) @map("created_at")
+  updatedAt          DateTime?            @updatedAt @map("updated_at")
+  active             Boolean              @default(true)
+  companyId          String               @map("company_id")
   accountPayables    Account_payable[]
   accountReceivables Account_receivable[]
+  company            Company              @relation(fields: [companyId], references: [id], onDelete: Cascade)
 
   @@map("expense_categories")
 }
 
-// Status do pagamento
-enum PaymentStatus {
-  Pendente
-  Pago
-  Cancelado
-}
-
-// Contas a pagar
 model Account_payable {
-  id             String        @id @default(uuid())
-  paymentDate    DateTime      @map("payment_date")
-  status         PaymentStatus
-  issueDate      DateTime      @map("issue_date")
-  dueDate        DateTime      @map("due_date")
-  invoiceAmount  Int           @map("invoice_amount")
-  invoiceNumber  String        @map("invoice_number")
-  penaltyAmount  Int?          @map("penalty_amount")
-  interestAmount Int?          @map("interest_amount")
-  observation    String?
-  purchaseCode   String?       @map("purchase_code")
-  createdAt      DateTime      @default(now()) @map("created_at")
-  updatedAt      DateTime?     @updatedAt @map("updated_at")
-  active         Boolean       @default(true)
-
-  expenseId String  @map("expense_id")
-  expense   Expense @relation(fields: [expenseId], references: [id], onDelete: Cascade)
-
+  id              String         @id @default(uuid())
+  paymentDate     DateTime       @map("payment_date")
+  status          PaymentStatus
+  issueDate       DateTime       @map("issue_date")
+  dueDate         DateTime       @map("due_date")
+  invoiceAmount   Int            @map("invoice_amount")
+  invoiceNumber   String         @map("invoice_number")
+  penaltyAmount   Int?           @map("penalty_amount")
+  interestAmount  Int?           @map("interest_amount")
+  observation     String?
+  purchaseCode    String?        @map("purchase_code")
+  createdAt       DateTime       @default(now()) @map("created_at")
+  updatedAt       DateTime?      @updatedAt @map("updated_at")
+  active          Boolean        @default(true)
+  expenseId       String         @map("expense_id")
   paymentMethodId String         @map("payment_method_id")
+  companyId       String         @map("company_id")
+  company         Company        @relation(fields: [companyId], references: [id], onDelete: Cascade)
+  expense         Expense        @relation(fields: [expenseId], references: [id], onDelete: Cascade)
   paymentMethod   Payment_method @relation(fields: [paymentMethodId], references: [id], onDelete: Cascade)
-
-  companyId String   @map("company_id")
-  company   Company? @relation(fields: [companyId], references: [id], onDelete: Cascade)
 
   @@map("account_payables")
 }
 
-// Contas a receber
 model Account_receivable {
-  id             String        @id @default(uuid())
-  paymentDate    DateTime      @map("payment_date")
-  status         PaymentStatus
-  issueDate      DateTime      @map("issue_date")
-  dueDate        DateTime      @map("due_date")
-  invoiceAmount  Int           @map("invoice_amount")
-  invoiceNumber  String        @map("invoice_number")
-  penaltyAmount  Int?          @map("penalty_amount")
-  interestAmount Int?          @map("interest_amount")
-  description    String?
-  observation    String?
-  createdAt      DateTime      @default(now()) @map("created_at")
-  updatedAt      DateTime?     @updatedAt @map("updated_at")
-  active         Boolean       @default(true)
-
-  clientId String @map("client_id")
-  client   Client @relation(fields: [clientId], references: [id], onDelete: Cascade)
-
-  expenseId String  @map("expense_id")
-  expense   Expense @relation(fields: [expenseId], references: [id], onDelete: Cascade)
-
+  id              String         @id @default(uuid())
+  paymentDate     DateTime       @map("payment_date")
+  status          PaymentStatus
+  issueDate       DateTime       @map("issue_date")
+  dueDate         DateTime       @map("due_date")
+  invoiceAmount   Int            @map("invoice_amount")
+  invoiceNumber   String         @map("invoice_number")
+  penaltyAmount   Int?           @map("penalty_amount")
+  interestAmount  Int?           @map("interest_amount")
+  description     String?
+  observation     String?
+  createdAt       DateTime       @default(now()) @map("created_at")
+  updatedAt       DateTime?      @updatedAt @map("updated_at")
+  active          Boolean        @default(true)
+  clientId        String         @map("client_id")
+  expenseId       String         @map("expense_id")
   paymentMethodId String         @map("payment_method_id")
+  companyId       String         @map("company_id")
+  client          Client         @relation(fields: [clientId], references: [id], onDelete: Cascade)
+  company         Company        @relation(fields: [companyId], references: [id], onDelete: Cascade)
+  expense         Expense        @relation(fields: [expenseId], references: [id], onDelete: Cascade)
   paymentMethod   Payment_method @relation(fields: [paymentMethodId], references: [id], onDelete: Cascade)
-
-  companyId String   @map("company_id")
-  company   Company? @relation(fields: [companyId], references: [id], onDelete: Cascade)
 
   @@map("account_receivables")
 }
 
-// Tipos de pagamento
 model Payment_type {
-  id          String    @id @default(uuid())
-  description String
-  createdAt   DateTime  @default(now()) @map("created_at")
-  updatedAt   DateTime? @updatedAt @map("updated_at")
-  active      Boolean   @default(true)
-
+  id             String           @id @default(uuid())
+  description    String
+  createdAt      DateTime         @default(now()) @map("created_at")
+  updatedAt      DateTime?        @updatedAt @map("updated_at")
+  active         Boolean          @default(true)
   paymentMethods Payment_method[]
 
   @@map("payment_types")
 }
 
-// Formas de pagamento
 model Payment_method {
-  id          String    @id @default(uuid())
-  description String
-  createdAt   DateTime  @default(now()) @map("created_at")
-  updatedAt   DateTime? @updatedAt @map("updated_at")
-  active      Boolean   @default(true)
-
-  paymentTypeId String       @map("payment_type_id")
-  paymentType   Payment_type @relation(fields: [paymentTypeId], references: [id], onDelete: Cascade)
-
-  accountReceivables Account_receivable[]
+  id                 String               @id @default(uuid())
+  description        String
+  createdAt          DateTime             @default(now()) @map("created_at")
+  updatedAt          DateTime?            @updatedAt @map("updated_at")
+  active             Boolean              @default(true)
+  paymentTypeId      String               @map("payment_type_id")
   accountPayables    Account_payable[]
+  accountReceivables Account_receivable[]
   cashierMovements   Cashier_movement[]
+  paymentType        Payment_type         @relation(fields: [paymentTypeId], references: [id], onDelete: Cascade)
 
   @@map("payment_methods")
 }
 
-// Caixa
 model Cashier {
-  id            String    @id @default(uuid())
-  openingValue  Int       @map("opening_value")
-  closingValue  Int?      @map("closing_value")
-  cashierNumber Int       @map("cashier_number")
-  openingDate   DateTime  @default(now()) @map("opening_date")
-  closingDate   DateTime? @map("closing_date")
-  active        Boolean   @default(true)
-
-  companyId String   @map("company_id")
-  company   Company? @relation(fields: [companyId], references: [id], onDelete: Cascade)
-
+  id               String             @id @default(uuid())
+  openingValue     Int                @map("opening_value")
+  closingValue     Int?               @map("closing_value")
+  cashierNumber    Int                @map("cashier_number")
+  openingDate      DateTime           @default(now()) @map("opening_date")
+  closingDate      DateTime?          @map("closing_date")
+  active           Boolean            @default(true)
+  companyId        String             @map("company_id")
   cashierMovements Cashier_movement[]
+  company          Company            @relation(fields: [companyId], references: [id], onDelete: Cascade)
 
   @@map("cashiers")
 }
 
-// Movimentações do caixa
 model Cashier_movement {
-  id            String   @id @default(uuid())
-  movementValue Int      @map("movement_value")
-  movementDate  DateTime @default(now()) @map("movement_date")
-  observation   String?
-
-  cashierId String  @map("cashier_id")
-  cashier   Cashier @relation(fields: [cashierId], references: [id], onDelete: Cascade)
-
+  id              String         @id @default(uuid())
+  movementValue   Int            @map("movement_value")
+  movementDate    DateTime       @default(now()) @map("movement_date")
+  observation     String?
+  cashierId       String         @map("cashier_id")
   paymentMethodId String         @map("payment_method_id")
+  companyId       String         @map("company_id")
+  cashier         Cashier        @relation(fields: [cashierId], references: [id], onDelete: Cascade)
+  company         Company        @relation(fields: [companyId], references: [id], onDelete: Cascade)
   paymentMethod   Payment_method @relation(fields: [paymentMethodId], references: [id], onDelete: Cascade)
-
-  companyId String   @map("company_id")
-  company   Company? @relation(fields: [companyId], references: [id], onDelete: Cascade)
 
   @@map("cashier_movements")
 }
 
-// Endereços
 model Address {
   id           String    @id @default(uuid())
   cep          String
@@ -270,40 +213,52 @@ model Address {
   createdAt    DateTime  @default(now()) @map("created_at")
   updatedAt    DateTime? @updatedAt @map("updated_at")
   isMain       Boolean   @default(false) @map("is_main")
-
-  clientId String @map("client_id")
-  client   Client @relation(fields: [clientId], references: [id], onDelete: Cascade)
-
-  companyId String   @map("company_id")
-  company   Company? @relation(fields: [companyId], references: [id], onDelete: Cascade)
+  clientId     String    @map("client_id")
+  companyId    String    @map("company_id")
+  client       Client    @relation(fields: [clientId], references: [id], onDelete: Cascade)
+  company      Company   @relation(fields: [companyId], references: [id], onDelete: Cascade)
 
   @@map("addresses")
 }
 
-// Empresa
 model Company {
-  id                String     @id @default(uuid())
-  name              String
-  fantasyName       String?    @map("fantasy_name")
-  type              ClientType
-  cpfCnpj           String     @unique @map("cpf_cnpj")
-  stateRegistration String?    @map("state_registration")
-  observation       String?
-  createdAt         DateTime   @default(now()) @map("created_at")
-  updatedAt         DateTime?  @updatedAt @map("updated_at")
-  provider          Boolean    @default(false)
-  active            Boolean    @default(true)
-
-  users              User[]
-  emails             Email[]
-  phones             Phone[]
-  addresses          Address[]
-  clients            Client[]
-  expenses           Expense[]
+  id                 String               @id @default(uuid())
+  name               String
+  fantasyName        String?              @map("fantasy_name")
+  cpfCnpj            String               @unique @map("cpf_cnpj")
+  stateRegistration  String?              @map("state_registration")
+  observation        String?
+  createdAt          DateTime             @default(now()) @map("created_at")
+  updatedAt          DateTime?            @updatedAt @map("updated_at")
+  provider           Boolean              @default(false)
+  active             Boolean              @default(true)
+  type               ClientType
   accountPayables    Account_payable[]
   accountReceivables Account_receivable[]
-  cashiers           Cashier[]
+  addresses          Address[]
   cashierMovements   Cashier_movement[]
+  cashiers           Cashier[]
+  clients            Client[]
+  emails             Email[]
+  expenses           Expense[]
+  phones             Phone[]
+  users              User[]
 
   @@map("companies")
+}
+
+enum ClientType {
+  PF
+  PJ
+}
+
+enum ExpenseType {
+  Credito
+  Debito
+}
+
+enum PaymentStatus {
+  Pendente
+  Pago
+  Cancelado
 }
