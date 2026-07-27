@@ -97,3 +97,10 @@ Authorization: Bearer {{authToken}}
 GET {{baseUrl}}/auth/me
 Content-Type: application/json
 Authorization: Bearer {{authToken}}
+
+###
+#Buscar CNPJ
+# @name search_cnpj
+GET {{baseUrl}}/receitaws/18696809000165
+Content-Type: application/json
+Authorization: Bearer {{authToken}}
