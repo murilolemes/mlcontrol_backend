@@ -1,0 +1,17 @@
+export interface ReceitawsResponseDto {
+  abertura: string,
+  situacao: string,
+  tipo: string,
+  nome: string,
+  fantasia: string,
+  logradouro: string,
+  numero: string,
+  municipio: string,
+  bairro: string,
+  uf: string,
+  cep: string,
+  email: string,
+  telefone: string,
+  cnpj: string,
+  complemento: string,
+}
